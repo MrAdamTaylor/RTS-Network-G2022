@@ -70,4 +70,9 @@ public class RTSPlayer : NetworkBehaviour
     }
 
     #endregion
+
+    public List<Unit> GetMyUnits()
+    {
+        return myUnits;
+    }
 }
