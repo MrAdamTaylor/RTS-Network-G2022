@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -9,15 +10,53 @@ public class Unit : NetworkBehaviour
 {
     [SerializeField] private UnityEvent _onSelected;
     [SerializeField] private UnityEvent _onDeselected;
-    [SerializeField] private PlayerUnityMovement _unitMovement = null; //Modify
+    [SerializeField] private PlayerUnityMovement _unitMovement = null;
 
-    public PlayerUnityMovement GetUnitMovement() //Modify
+    public static event Action<Unit> ServerOnUnitSpawned;
+    public static event Action<Unit> ServerOnUnitDespawned;
+
+
+    public static event Action<Unit> AuthorityOnUnitSpawned;
+    public static event Action<Unit> AuthorityOnUnitDespawned;
+    
+    
+    public PlayerUnityMovement GetUnitMovement() 
     {
         return _unitMovement;
     }
 
+    #region Server
+
+    public override void OnStartServer()
+    {
+        ServerOnUnitSpawned?.Invoke(this);
+    }
+
+    public override void OnStopServer()
+    {
+        ServerOnUnitDespawned?.Invoke(this);
+    }
+
+
+    #endregion
+    
     #region Client
 
+    public override void OnStartClient()
+    {
+        if (!isClientOnly || !isOwned) { return; }
+
+        AuthorityOnUnitSpawned?.Invoke(this);
+    }
+
+    public override void OnStopClient()
+    {
+        if (!isClientOnly || !isOwned) { return; }
+
+        AuthorityOnUnitDespawned?.Invoke(this);
+    }
+
+    
     [Client]
     public void Select()
     {
