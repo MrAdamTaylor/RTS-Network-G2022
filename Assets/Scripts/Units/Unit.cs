@@ -11,15 +11,20 @@ public class Unit : NetworkBehaviour
     [SerializeField] private UnityEvent _onSelected;
     [SerializeField] private UnityEvent _onDeselected;
     [SerializeField] private PlayerUnityMovement _unitMovement = null;
-
+    [SerializeField] private Targeter _targeter;
+    
     public static event Action<Unit> ServerOnUnitSpawned;
     public static event Action<Unit> ServerOnUnitDespawned;
 
 
     public static event Action<Unit> AuthorityOnUnitSpawned;
     public static event Action<Unit> AuthorityOnUnitDespawned;
-    
-    
+
+    public Targeter GetTargeter()
+    {
+        return _targeter;
+    }
+
     public PlayerUnityMovement GetUnitMovement() 
     {
         return _unitMovement;
@@ -60,14 +65,14 @@ public class Unit : NetworkBehaviour
     [Client]
     public void Select()
     {
-        if (!isOwned) return; //Modify  
+        if (!isOwned) return;  
         _onSelected?.Invoke();
     }
 
     [Client]
     public void Deselect()
     {
-        if (!isOwned) return;   //Modify
+        if (!isOwned) return;   
         _onDeselected?.Invoke();
     }
 

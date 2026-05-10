@@ -30,8 +30,29 @@ public class UnitCommandGiver : MonoBehaviour
             return;
         }
 
+        if (hit.collider.TryGetComponent<Targetable>(out Targetable targetable))
+        {
+            if (targetable.isOwned)
+            {
+                TryMove(hit.point);
+                return;
+            }
+
+            TryTarget(targetable);
+            return;
+        }
+
         TryMove(hit.point);
 
+    }
+
+    private void TryTarget(Targetable target)
+    {
+        for (int i = 0; i < _unitSelectionHandler.SelectedUnits.Count; i++)
+        {
+            Unit unit = _unitSelectionHandler.SelectedUnits[i];
+            unit.GetTargeter().CmdSetTarget(target.gameObject);
+        }
     }
 
     private void TryMove(Vector3 hitInfoPoint)
@@ -39,8 +60,6 @@ public class UnitCommandGiver : MonoBehaviour
         for (int i = 0; i < _unitSelectionHandler.SelectedUnits.Count; i++)
         {
             Unit unit = _unitSelectionHandler.SelectedUnits[i];
-            
-            //unit.GetUnitMovement().MoveUnit(hitInfoPoint);
             
             PlayerUnityMovement playerUnityMovement = unit.GetUnitMovement();
             playerUnityMovement.MoveUnit(hitInfoPoint);
