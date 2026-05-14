@@ -51,7 +51,7 @@ public class UnitCommandGiver : MonoBehaviour
         for (int i = 0; i < _unitSelectionHandler.SelectedUnits.Count; i++)
         {
             Unit unit = _unitSelectionHandler.SelectedUnits[i];
-            unit.GetTargeter().CmdSetTarget(target.gameObject);
+            unit.GetTargeter().CmdSetTarget(target);
         }
     }
 

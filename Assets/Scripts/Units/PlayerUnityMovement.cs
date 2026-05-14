@@ -22,7 +22,7 @@ public class PlayerUnityMovement : NetworkBehaviour
 
     public void MoveUnit(Vector3 position)
     {
-        _targeter.ClearTaarget();
+        _targeter.ClearTarget();
         
         if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
         {
